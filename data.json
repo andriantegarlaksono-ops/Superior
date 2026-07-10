@@ -1,0 +1,93 @@
+[
+  {
+    "id": "1",
+    "name": "Superior Orthopedic Care",
+    "category": "Orthopedic",
+    "description": "Dirancang khusus bersama ahli ortopedi untuk menyokong tulang belakang Anda secara maksimal. Menjaga postur tubuh ideal saat tidur dan mencegah sakit punggung ketika terbangun. Menggunakan high-density foam dikombinasikan dengan natural latex layer.",
+    "thickness": 30,
+    "firmness": 9,
+    "warranty": 15,
+    "image": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=800&q=80",
+    "features": [
+      "Chiropractic Support System",
+      "Extra Hard High-Density Foam",
+      "Natural Latex Top Layer",
+      "Anti-Dust Mite & Hypoallergenic"
+    ],
+    "sizes": [
+      { "name": "90 x 200 (Single)", "price": 3200000 },
+      { "name": "120 x 200 (Double)", "price": 4100000 },
+      { "name": "160 x 200 (Queen)", "price": 5400000 },
+      { "name": "180 x 200 (King)", "price": 6100000 },
+      { "name": "200 x 200 (Super King)", "price": 6800000 }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "Royal Dream Natural Latex",
+    "category": "Latex",
+    "description": "Menawarkan sensasi kenyamanan alami yang luar biasa berkat lapisan 100% Getah Karet Alami (Natural Latex). Memiliki sirkulasi udara mikro-independen yang mendinginkan suhu tubuh secara aktif dan memberikan kelembutan tanpa amblas.",
+    "thickness": 32,
+    "firmness": 5,
+    "warranty": 10,
+    "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80",
+    "features": [
+      "100% Belgian Natural Latex",
+      "Pin-hole Cooling Technology",
+      "Motion Isolation (No Partner Disturbance)",
+      "Organic Bamboo Fabric Cover"
+    ],
+    "sizes": [
+      { "name": "90 x 200 (Single)", "price": 4500000 },
+      { "name": "120 x 200 (Double)", "price": 5800000 },
+      { "name": "160 x 200 (Queen)", "price": 7500000 },
+      { "name": "180 x 200 (King)", "price": 8400000 },
+      { "name": "200 x 200 (Super King)", "price": 9300000 }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "Luxury Cloud Memory Gel",
+    "category": "Memory Foam",
+    "description": "Nikmati sensasi tidur seperti di atas awan. Teknologi Gel-Infused Memory Foam secara aktif mengikuti lekuk tubuh dan menyerap panas berlebih, memberikan kesejukan serta mendistribusikan tekanan tubuh secara merata ke seluruh permukaan kasur.",
+    "thickness": 35,
+    "firmness": 3,
+    "warranty": 12,
+    "image": "https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80",
+    "features": [
+      "Cooling Gel-Infused Memory Foam",
+      "Pressure-Relieving Technology",
+      "Ultra Soft Cashmere Cover",
+      "Zero Motion Transfer"
+    ],
+    "sizes": [
+      { "name": "120 x 200 (Double)", "price": 6200000 },
+      { "name": "160 x 200 (Queen)", "price": 8000000 },
+      { "name": "180 x 200 (King)", "price": 8900000 },
+      { "name": "200 x 200 (Super King)", "price": 9900000 }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "Grand Imperial Pocket Spring",
+    "category": "Spring Bed",
+    "description": "Perpaduan kemewahan pegas Pocket Spring yang dibungkus secara independen untuk meredam getaran gerakan secara penuh, dilapisi busa quilting tebal bernuansa hotel bintang lima. Sangat stabil dan memberikan topangan tubuh yang seimbang.",
+    "thickness": 28,
+    "firmness": 7,
+    "warranty": 15,
+    "image": "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=800&q=80",
+    "features": [
+      "Individually Pocketed Springs",
+      "Euro-Top Luxurious Quilting",
+      "Encase Foam Border Support",
+      "Anti-Microbial Premium Fabric"
+    ],
+    "sizes": [
+      { "name": "90 x 200 (Single)", "price": 2800000 },
+      { "name": "120 x 200 (Double)", "price": 3500000 },
+      { "name": "160 x 200 (Queen)", "price": 4600000 },
+      { "name": "180 x 200 (King)", "price": 5200000 },
+      { "name": "200 x 200 (Super King)", "price": 5900000 }
+    ]
+  }
+]
