@@ -4,19 +4,19 @@
 
 /* 1. CSS VARIABLES & RESET */
 :root {
-  --bg-primary: #080b11;
-  --bg-secondary: #111723;
-  --bg-tertiary: #1b2336;
-  --accent-gold: #d4af37;
-  --accent-gold-hover: #e2b855;
-  --accent-gold-light: rgba(212, 175, 55, 0.15);
+  --bg-primary: #0a070c;
+  --bg-secondary: #140e18;
+  --bg-tertiary: #1f1625;
+  --accent-gold: #e27593;
+  --accent-gold-hover: #f06292;
+  --accent-gold-light: rgba(226, 117, 147, 0.15);
   --color-white: #ffffff;
   --color-text-primary: #f1f5f9;
   --color-text-secondary: #94a3b8;
   --color-border: rgba(255, 255, 255, 0.08);
   --color-danger: #ef4444;
   --color-success: #22c55e;
-  --color-info: #0ea5e9;
+  --color-info: #ec4899;
   --color-whatsapp: #25D366;
   --color-whatsapp-hover: #20ba5a;
   
@@ -722,7 +722,7 @@ button, input, select, textarea {
 
 .firmness-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #38bdf8, #f59e0b, #ef4444);
+  background: linear-gradient(90deg, #f472b6, #ec4899, #db2777);
   border-radius: 50px;
   transition: width 0.8s ease-in-out;
 }

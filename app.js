@@ -4,9 +4,9 @@
 
 // Global Constants
 const CONTACT_PHONE = "6285536581733"; // Format Internasional (tanpa +, tanpa 0 di depan)
-const ADMIN_USER = "superior";
-const ADMIN_PASS = "superior123";
-const STORAGE_KEY = "superior_mattress_catalog";
+const ADMIN_USER = "villaab";
+const ADMIN_PASS = "villaab123";
+const STORAGE_KEY = "villa_ab_catalog";
 
 // State
 let products = [];
@@ -14,7 +14,7 @@ let categories = [];
 let selectedProduct = null;
 let currentEditingId = null;
 
-const CATEGORIES_KEY = "superior_mattress_categories";
+const CATEGORIES_KEY = "villa_ab_categories";
 
 // Initialize App
 window.addEventListener("DOMContentLoaded", () => {
@@ -54,7 +54,7 @@ async function fetchDefaultData() {
       products = Array.isArray(data) ? data : [];
       categories = [...new Set(products.map(p => p.category).filter(Boolean))];
       if (categories.length === 0) {
-        categories = ["Orthopedic", "Natural Latex", "Memory Foam", "Spring Bed"];
+        categories = ["Deluxe Room", "Suite Room", "Family Suite", "Standard Room", "Glamping"];
       }
     }
 
@@ -65,7 +65,7 @@ async function fetchDefaultData() {
   } catch (error) {
     console.error("Error loading initial data.json:", error);
     products = [];
-    categories = ["Orthopedic", "Natural Latex", "Memory Foam", "Spring Bed"];
+    categories = ["Deluxe Room", "Suite Room", "Family Suite", "Standard Room", "Glamping"];
     updateCategoryFilters();
     renderCatalog();
   }
@@ -77,12 +77,12 @@ function initCategories() {
     try {
       categories = JSON.parse(localCats);
     } catch (e) {
-      categories = ["Orthopedic", "Natural Latex", "Memory Foam", "Spring Bed"];
+      categories = ["Deluxe Room", "Suite Room", "Family Suite", "Standard Room", "Glamping"];
     }
   } else {
     // Bangun dari kategori produk yang ada atau gunakan bawaan
     const currentCats = [...new Set(products.map(p => p.category).filter(Boolean))];
-    categories = currentCats.length > 0 ? currentCats : ["Orthopedic", "Natural Latex", "Memory Foam", "Spring Bed"];
+    categories = currentCats.length > 0 ? currentCats : ["Deluxe Room", "Suite Room", "Family Suite", "Standard Room", "Glamping"];
     saveCategories();
   }
 }
@@ -110,12 +110,12 @@ function renderCatalog(filteredProducts = products) {
   const productGrid = document.getElementById("product-grid");
   const countSpan = document.getElementById("product-count");
 
-  countSpan.innerText = `Menampilkan ${filteredProducts.length} produk`;
+  countSpan.innerText = `Menampilkan ${filteredProducts.length} kamar`;
 
   if (filteredProducts.length === 0) {
     productGrid.innerHTML = `
       <div class="loading-state">
-        <p>Tidak ada produk kasur yang cocok dengan kriteria filter Anda.</p>
+        <p>Tidak ada kamar villa yang cocok dengan kriteria filter Anda.</p>
         <button class="btn btn-outline" style="margin-top: 16px;" onclick="resetFilters()">Reset Filter</button>
       </div>
     `;
@@ -131,32 +131,34 @@ function renderCatalog(filteredProducts = products) {
       ? `${formatIDR(minPrice)} - ${formatIDR(maxPrice)}`
       : formatIDR(minPrice);
 
-    // Determine firmness label
-    let firmnessText = "Medium";
-    if (product.firmness <= 4) firmnessText = "Soft";
-    else if (product.firmness >= 8) firmnessText = "Firm";
+    // Determine rating label
+    let ratingText = "Baik";
+    if (product.firmness === 10) ratingText = "Sempurna";
+    else if (product.firmness === 9) ratingText = "Sangat Baik";
+    else if (product.firmness === 8) ratingText = "Baik";
+    else ratingText = "Standar";
 
     return `
       <div class="product-card" id="prod-${product.id}">
         <span class="product-cat-tag">${product.category}</span>
         <div class="product-img-wrapper">
-          <img class="product-img" src="${product.image || 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80'}" alt="${product.name}" loading="lazy">
+          <img class="product-img" src="${product.image || 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80'}" alt="${product.name}" loading="lazy">
         </div>
         <div class="product-body">
           <h3 class="product-title">${product.name}</h3>
           
           <div class="product-quick-specs">
             <div class="spec-badge">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              <span>${product.thickness} cm</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>${product.thickness} Orang</span>
             </div>
             <div class="spec-badge">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              <span>Garansi ${product.warranty} Thn</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h20M2 12h20M2 16h20M22 4v16M18 8H6v4h12V8z"/></svg>
+              <span>${product.warranty} Ranjang</span>
             </div>
             <div class="spec-badge">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              <span>${firmnessText} (${product.firmness}/10)</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>${ratingText} (${product.firmness}/10)</span>
             </div>
           </div>
           
@@ -199,14 +201,17 @@ function applyFilters() {
     else if (firmnessVal === "medium") matchesFirmness = product.firmness >= 5 && product.firmness <= 7;
     else if (firmnessVal === "firm") matchesFirmness = product.firmness >= 8;
 
-    // Size filter
+    // Size filter (mapped to booking packages)
     let matchesSize = true;
     if (sizeVal !== "all") {
-      // Check if product has sizes with width matching filter width (e.g. 90, 120, etc.)
       matchesSize = product.sizes.some(sizeObj => {
         const sizeName = sizeObj.name.toLowerCase();
-        // E.g., if filter is "90", matches "90 x 200"
-        return sizeName.startsWith(sizeVal) || sizeName.includes(` ${sizeVal} `) || sizeName.includes(`${sizeVal}x`);
+        if (sizeVal === "transit") {
+          return sizeName.includes("transit");
+        } else if (sizeVal === "menginap") {
+          return sizeName.includes("menginap");
+        }
+        return true;
       });
     }
 
@@ -438,20 +443,18 @@ function openDetailModal(id) {
   document.getElementById("detail-image").alt = product.name;
   document.getElementById("detail-category").innerText = product.category;
   document.getElementById("detail-name").innerText = product.name;
-  document.getElementById("detail-thickness").innerText = `${product.thickness} cm`;
-  document.getElementById("detail-warranty").innerText = `${product.warranty} Tahun`;
+  document.getElementById("detail-thickness").innerText = `${product.thickness} Orang`;
+  document.getElementById("detail-warranty").innerText = `${product.warranty} Ranjang`;
 
-  // Firmness Bar
+  // Firmness Bar (Rating Bar)
   const firmnessPercentage = product.firmness * 10;
   document.getElementById("detail-firmness-fill").style.width = `${firmnessPercentage}%`;
 
-  let firmnessLabel = "Medium";
-  if (product.firmness <= 3) firmnessLabel = "Sangat Empuk (Soft)";
-  else if (product.firmness === 4) firmnessLabel = "Empuk (Medium-Soft)";
-  else if (product.firmness === 5) firmnessLabel = "Sedang (Medium)";
-  else if (product.firmness >= 6 && product.firmness <= 7) firmnessLabel = "Sedang Mantap (Medium-Firm)";
-  else if (product.firmness >= 8 && product.firmness <= 9) firmnessLabel = "Keras (Firm)";
-  else if (product.firmness === 10) firmnessLabel = "Sangat Keras (Extra Firm)";
+  let firmnessLabel = "Sempurna";
+  if (product.firmness <= 4) firmnessLabel = "Standar (Standard)";
+  else if (product.firmness >= 5 && product.firmness <= 7) firmnessLabel = "Baik (Good)";
+  else if (product.firmness >= 8 && product.firmness <= 9) firmnessLabel = "Sangat Baik (Very Good)";
+  else if (product.firmness === 10) firmnessLabel = "Sempurna (Excellent)";
 
   document.getElementById("detail-firmness-text").innerText = `${firmnessLabel} (${product.firmness}/10)`;
   document.getElementById("detail-description").innerText = product.description;
@@ -497,13 +500,15 @@ function orderViaWhatsApp() {
   const sizeObj = selectedProduct.sizes[sizeIdx];
   const priceFormatted = formatIDR(sizeObj.price);
 
-  const text = `Halo Superior Sleep Gallery, saya tertarik untuk memesan kasur berikut:\n\n` +
-    `*Produk:* ${selectedProduct.name}\n` +
+  const text = `Halo Villa AB Cozy Resort, saya tertarik untuk memesan/booking kamar berikut:\n\n` +
+    `*Kamar:* ${selectedProduct.name}\n` +
     `*Kategori:* ${selectedProduct.category}\n` +
-    `*Ukuran:* ${sizeObj.name}\n` +
-    `*Ketebalan:* ${selectedProduct.thickness} cm\n` +
+    `*Paket:* ${sizeObj.name}\n` +
+    `*Kapasitas:* ${selectedProduct.thickness} Orang\n` +
+    `*Jumlah Ranjang:* ${selectedProduct.warranty} Ranjang\n` +
+    `*Rating Kamar:* ${selectedProduct.firmness}/10\n` +
     `*Harga:* ${priceFormatted}\n\n` +
-    `Apakah stok ukuran tersebut tersedia? Mohon info untuk estimasi pengiriman. Terima kasih.`;
+    `Apakah kamar tersebut tersedia untuk dipesan? Mohon info kelanjutannya. Terima kasih.`;
 
   const encodedText = encodeURIComponent(text);
   const waUrl = `https://wa.me/${CONTACT_PHONE}?text=${encodedText}`;
@@ -586,7 +591,7 @@ function renderAdminTable() {
   const tbody = document.getElementById("admin-product-table-body");
 
   if (products.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Tidak ada produk aktif. Klik Tambah Produk untuk memulai.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Tidak ada kamar aktif. Klik Tambah Kamar untuk memulai.</td></tr>`;
     return;
   }
 
@@ -632,11 +637,11 @@ function openAddProductForm() {
   // Populate form categories dropdown
   populateFormCategories();
 
-  // Set Sizes Container empty and add one default empty row
+  // Set Sizes Container empty and add default room booking packages
   document.getElementById("form-sizes-container").innerHTML = "";
-  addSizeRow("90 x 200 (Single)", 2000000);
-  addSizeRow("160 x 200 (Queen)", 3500000);
-  addSizeRow("180 x 200 (King)", 4000000);
+  addSizeRow("Transit 3 Jam", 150000);
+  addSizeRow("Menginap 1 Hari (Weekday)", 450000);
+  addSizeRow("Menginap 1 Hari (Weekend)", 550000);
 
   document.getElementById("product-form-modal").style.display = "block";
 }
@@ -708,8 +713,8 @@ function addSizeRow(name = "", price = "") {
   div.className = "size-row";
   div.id = rowId;
   div.innerHTML = `
-    <input type="text" class="size-name-input" required placeholder="Contoh: 160 x 200 (Queen)" value="${name}">
-    <input type="number" class="size-price-input" required placeholder="Harga (Contoh: 3500000)" value="${price}">
+    <input type="text" class="size-name-input" required placeholder="Contoh: Menginap 1 Hari (Weekday)" value="${name}">
+    <input type="number" class="size-price-input" required placeholder="Harga (Contoh: 450000)" value="${price}">
     <button type="button" class="btn-remove-row" onclick="removeSizeRow('${rowId}')">&times;</button>
   `;
   container.appendChild(div);
@@ -721,7 +726,7 @@ function removeSizeRow(rowId) {
   if (container.children.length > 1) {
     row.remove();
   } else {
-    alert("Produk kasur harus memiliki setidaknya satu variasi ukuran!");
+    alert("Kamar harus memiliki setidaknya satu pilihan paket booking!");
   }
 }
 
@@ -768,7 +773,7 @@ function handleProductFormSubmit(event) {
   const category = document.getElementById("form-category").value;
   
   if (!category) {
-    alert("Harap pilih kategori produk!");
+    alert("Harap pilih kategori kamar!");
     return;
   }
 
@@ -783,7 +788,7 @@ function handleProductFormSubmit(event) {
   const image = base64Img || urlImg;
 
   if (!image) {
-    alert("Harap pilih berkas foto atau masukkan URL gambar produk!");
+    alert("Harap pilih berkas foto atau masukkan URL gambar kamar!");
     return;
   }
 
@@ -795,7 +800,7 @@ function handleProductFormSubmit(event) {
     .filter(f => f.length > 0);
 
   if (features.length === 0) {
-    alert("Harap masukkan setidaknya satu fitur unggulan produk!");
+    alert("Harap masukkan setidaknya satu fitur/fasilitas utama kamar!");
     return;
   }
 
@@ -812,7 +817,7 @@ function handleProductFormSubmit(event) {
   });
 
   if (sizes.length === 0) {
-    alert("Harap lengkapi setidaknya satu ukuran dan harga!");
+    alert("Harap lengkapi setidaknya satu pilihan paket dan harga!");
     return;
   }
 
@@ -833,7 +838,7 @@ function handleProductFormSubmit(event) {
         features,
         sizes
       };
-      alert("Produk berhasil diperbarui!");
+      alert("Detail kamar berhasil diperbarui!");
     }
   } else {
     // Add
@@ -851,7 +856,7 @@ function handleProductFormSubmit(event) {
       sizes
     };
     products.push(newProduct);
-    alert("Produk baru berhasil ditambahkan!");
+    alert("Kamar baru berhasil ditambahkan!");
   }
 
   // Save, render and close modals
@@ -867,14 +872,14 @@ function deleteProduct(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
-  const confirmDelete = confirm(`Apakah Anda yakin ingin menghapus produk "${product.name}" dari katalog?`);
+  const confirmDelete = confirm(`Apakah Anda yakin ingin menghapus kamar "${product.name}" dari katalog?`);
   if (confirmDelete) {
     products = products.filter(p => p.id !== id);
     saveToLocalStorage();
     updateCategoryFilters();
     renderCatalog();
     renderAdminTable();
-    alert("Produk berhasil dihapus!");
+    alert("Kamar berhasil dihapus!");
   }
 }
 

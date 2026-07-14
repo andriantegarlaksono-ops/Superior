@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Superior Sleep Gallery - Katalog Kasur Premium</title>
-  <meta name="description" content="Temukan kasur mewah terbaik untuk tidur nyenyak bintang lima Anda. Didesain secara ergonomis dengan bahan latex alami, memory foam mendingin, dan pegas pocket independen.">
+  <title>Villa AB Cozy Resort - Katalog Kamar Villa Premium</title>
+  <meta name="description" content="Temukan kamar villa mewah terbaik untuk liburan dan istirahat berkelas Anda. Dilengkapi private pool, fasilitas modern, dan pemandangan alam yang asri di Villa AB Cozy Resort.">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,8 +18,8 @@
   <nav class="navbar">
     <div class="nav-container">
       <div class="logo">
-        <span class="logo-accent">SUPERIOR</span>
-        <span class="logo-text">SLEEP GALLERY</span>
+        <span class="logo-accent">VILLA AB</span>
+        <span class="logo-text">COZY RESORT</span>
       </div>
       
       <div class="nav-actions">
@@ -35,9 +35,9 @@
   <header class="hero-section">
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <div class="hero-badge">Luxury Sleep Experience</div>
-      <h1 class="hero-title">Kenyamanan Tidur Bintang Lima di Rumah Anda</h1>
-      <p class="hero-subtitle">Koleksi kasur premium ortopedi, latex alami, dan pocket spring yang dirancang untuk kesehatan tulang belakang dan tidur pulas tanpa gangguan.</p>
+      <div class="hero-badge">Luxury Villa Resort Experience</div>
+      <h1 class="hero-title">Kenyamanan Menginap Mewah & Estetik</h1>
+      <p class="hero-subtitle">Koleksi kamar villa premium dengan kolam renang pribadi, pemandangan alam asri, dan fasilitas bintang lima untuk liburan impian Anda.</p>
       <a href="#katalog" class="btn btn-primary btn-large">Jelajahi Koleksi</a>
     </div>
   </header>
@@ -48,16 +48,16 @@
       <div class="section-header">
         <div class="section-title-wrap">
           <span class="subtitle">OUR COLLECTION</span>
-          <h2 class="section-title">Katalog Kasur Terbaik</h2>
+          <h2 class="section-title">Katalog Kamar Villa Terbaik</h2>
         </div>
-        <p class="section-desc">Pilih kasur yang sesuai dengan kebutuhan tidur Anda. Gunakan filter di bawah ini untuk mempersempit pencarian.</p>
+        <p class="section-desc">Pilih tipe kamar yang sesuai dengan kebutuhan menginap Anda. Gunakan filter di bawah ini untuk mempersempit pencarian.</p>
       </div>
 
       <!-- Search & Filters Panel -->
       <div class="filters-panel">
         <div class="search-bar-wrap">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="search-input" placeholder="Cari nama kasur atau fitur (contoh: Latex, Orthopedic)..." oninput="applyFilters()">
+          <input type="text" id="search-input" placeholder="Cari nama kamar atau fasilitas (contoh: Pool, View)..." oninput="applyFilters()">
         </div>
         
         <div class="filters-grid">
@@ -70,27 +70,24 @@
             </select>
           </div>
 
-          <!-- Firmness Filter -->
+          <!-- Firmness Filter (Rating Filter) -->
           <div class="filter-group">
-            <label for="firmness-filter">Tingkat Kekerasan</label>
+            <label for="firmness-filter">Rating Kamar</label>
             <select id="firmness-filter" onchange="applyFilters()">
-              <option value="all">Semua Tingkat</option>
-              <option value="soft">Soft (1 - 4)</option>
-              <option value="medium">Medium (5 - 7)</option>
-              <option value="firm">Firm (8 - 10)</option>
+              <option value="all">Semua Rating</option>
+              <option value="soft">Standar (1 - 4)</option>
+              <option value="medium">Baik (5 - 7)</option>
+              <option value="firm">Sempurna (8 - 10)</option>
             </select>
           </div>
 
-          <!-- Size Filter -->
+          <!-- Size Filter (Package Filter) -->
           <div class="filter-group">
-            <label for="size-filter">Ukuran Kasur</label>
+            <label for="size-filter">Pilihan Paket</label>
             <select id="size-filter" onchange="applyFilters()">
-              <option value="all">Semua Ukuran</option>
-              <option value="90">90 x 200 (Single)</option>
-              <option value="120">120 x 200 (Double)</option>
-              <option value="160">160 x 200 (Queen)</option>
-              <option value="180">180 x 200 (King)</option>
-              <option value="200">200 x 200 (Super King)</option>
+              <option value="all">Semua Paket</option>
+              <option value="transit">Transit (3 - 6 Jam)</option>
+              <option value="menginap">Menginap (Harian)</option>
             </select>
           </div>
         </div>
@@ -106,7 +103,7 @@
         <!-- Dynamic loading of product cards from JS -->
         <div class="loading-state">
           <div class="spinner"></div>
-          <p>Memuat katalog kasur premium...</p>
+          <p>Memuat katalog kamar villa premium...</p>
         </div>
       </div>
     </div>
@@ -126,48 +123,48 @@
         <!-- Right Side: Details -->
         <div class="modal-info">
           <div class="detail-category-badge" id="detail-category">Kategori</div>
-          <h2 class="detail-title" id="detail-name">Nama Kasur</h2>
+          <h2 class="detail-title" id="detail-name">Nama Kamar</h2>
           
           <div class="detail-specs">
             <div class="spec-item">
-              <span class="spec-label">Ketebalan</span>
-              <span class="spec-val" id="detail-thickness">30 cm</span>
+              <span class="spec-label">Kapasitas</span>
+              <span class="spec-val" id="detail-thickness">2 Orang</span>
             </div>
             <div class="spec-item">
-              <span class="spec-label">Garansi Pegas/Busa</span>
-              <span class="spec-val" id="detail-warranty">15 Tahun</span>
+              <span class="spec-label">Jumlah Ranjang</span>
+              <span class="spec-val" id="detail-warranty">1 Ranjang</span>
             </div>
           </div>
 
-          <!-- Firmness Scale Indicator -->
+          <!-- Firmness Scale Indicator (Rating Scale Indicator) -->
           <div class="detail-firmness-wrap">
-            <span class="spec-label">Tingkat Kekerasan: <strong id="detail-firmness-text">Medium (7/10)</strong></span>
+            <span class="spec-label">Rating Kamar: <strong id="detail-firmness-text">Sempurna (10/10)</strong></span>
             <div class="firmness-bar-bg">
               <div class="firmness-bar-fill" id="detail-firmness-fill" style="width: 70%;"></div>
             </div>
             <div class="firmness-labels">
-              <span>Soft</span>
-              <span>Medium</span>
-              <span>Firm</span>
+              <span>Standar</span>
+              <span>Baik</span>
+              <span>Sempurna</span>
             </div>
           </div>
 
           <div class="detail-description-wrap">
-            <h3>Deskripsi Produk</h3>
-            <p id="detail-description">Detail deskripsi produk kasur...</p>
+            <h3>Deskripsi Kamar</h3>
+            <p id="detail-description">Detail deskripsi kamar...</p>
           </div>
 
           <div class="detail-features-wrap">
-            <h3>Fitur Utama</h3>
+            <h3>Fasilitas Utama</h3>
             <ul class="features-list" id="detail-features">
               <!-- Dynamically populated -->
             </ul>
           </div>
 
-          <!-- Size Selector & Price -->
+          <!-- Size Selector & Price (Package Booking Selector & Price) -->
           <div class="detail-action-card">
             <div class="size-select-group">
-              <label for="detail-size-select">Pilih Ukuran Kasur</label>
+              <label for="detail-size-select">Pilih Paket / Durasi Booking</label>
               <select id="detail-size-select" onchange="updateDetailPrice()"></select>
             </div>
             
@@ -195,7 +192,7 @@
       <button class="close-btn" onclick="closeLoginModal()">&times;</button>
       <div class="auth-header">
         <h2>Login Admin</h2>
-        <p>Masuk untuk mengelola katalog produk</p>
+        <p>Masuk untuk mengelola katalog villa & kamar</p>
       </div>
       
       <form id="login-form" onsubmit="handleLogin(event)">
@@ -241,10 +238,10 @@
       <!-- Tab Kelola Produk -->
       <div id="admin-products-tab" class="admin-tab-content">
         <div class="admin-tab-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-          <h3 style="font-size: 16px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 1px;">Daftar Produk Aktif</h3>
+          <h3 style="font-size: 16px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 1px;">Daftar Kamar Aktif</h3>
           <button class="btn btn-success" onclick="openAddProductForm()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Tambah Produk
+            Tambah Kamar
           </button>
         </div>
         <div class="admin-list-table-wrap">
@@ -253,9 +250,9 @@
               <thead>
                 <tr>
                   <th>Foto</th>
-                  <th>Nama Kasur</th>
+                  <th>Nama Kamar</th>
                   <th>Kategori</th>
-                  <th>Ukuran Terkecil - Terbesar</th>
+                  <th>Variasi Paket Booking</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -307,7 +304,7 @@
   <div id="product-form-modal" class="modal">
     <div class="modal-content product-form-card">
       <button class="close-btn" onclick="closeProductFormModal()">&times;</button>
-      <h2 id="form-modal-title">Tambah Produk Baru</h2>
+      <h2 id="form-modal-title">Tambah Kamar Baru</h2>
       
       <form id="product-form" onsubmit="handleProductFormSubmit(event)">
         <input type="hidden" id="form-product-id">
@@ -316,8 +313,8 @@
           <!-- General Info -->
           <div class="form-col">
             <div class="form-group">
-              <label for="form-name">Nama Produk*</label>
-              <input type="text" id="form-name" placeholder="Contoh: Superior Orthopedic Care">
+              <label for="form-name">Nama Kamar*</label>
+              <input type="text" id="form-name" placeholder="Contoh: Executive Pool Suite">
             </div>
 
             <div class="form-group">
@@ -332,7 +329,7 @@
               </div>
               <div id="inline-category-wrap" style="display: none; margin-top: 8px; background: rgba(255,255,255,0.02); padding: 12px; border-radius: var(--radius-md); border: 1px dashed var(--color-border);">
                 <div style="display: flex; gap: 8px; align-items: center;">
-                  <input type="text" id="inline-category-input" placeholder="Nama kategori baru (contoh: Latex Premium)..." style="flex-grow: 1; padding: 10px 14px;">
+                  <input type="text" id="inline-category-input" placeholder="Nama kategori baru (contoh: Deluxe Room)..." style="flex-grow: 1; padding: 10px 14px;">
                   <button type="button" class="btn btn-primary btn-small" onclick="saveInlineCategory()">Simpan</button>
                   <button type="button" class="btn btn-outline btn-small" onclick="toggleInlineCategoryInput(false)">Batal</button>
                 </div>
@@ -340,35 +337,35 @@
             </div>
 
             <div class="form-group">
-              <label for="form-description">Deskripsi Produk*</label>
-              <textarea id="form-description" rows="4" placeholder="Jelaskan kenyamanan dan keunggulan kasur ini..."></textarea>
+              <label for="form-description">Deskripsi Kamar*</label>
+              <textarea id="form-description" rows="4" placeholder="Jelaskan kenyamanan, fasilitas, dan keunggulan kamar villa ini..."></textarea>
             </div>
 
             <div class="form-row-2">
               <div class="form-group">
-                <label for="form-thickness">Ketebalan (cm)*</label>
-                <input type="number" id="form-thickness" placeholder="Contoh: 30">
+                <label for="form-thickness">Kapasitas (Orang)*</label>
+                <input type="number" id="form-thickness" placeholder="Contoh: 2">
               </div>
               <div class="form-group">
-                <label for="form-warranty">Garansi (Tahun)*</label>
-                <input type="number" id="form-warranty" placeholder="Contoh: 15">
+                <label for="form-warranty">Jumlah Ranjang*</label>
+                <input type="number" id="form-warranty" placeholder="Contoh: 1">
               </div>
             </div>
 
             <div class="form-group">
-              <label for="form-firmness">Tingkat Kekerasan (1-10)*</label>
+              <label for="form-firmness">Rating Kamar (1-10)*</label>
               <div class="firmness-input-wrap">
                 <input type="range" id="form-firmness" min="1" max="10" value="5" oninput="document.getElementById('form-firmness-val').innerText = this.value">
                 <span class="range-value"><span id="form-firmness-val">5</span>/10</span>
               </div>
-              <small class="form-help">1: Sangat Empuk (Soft) | 5: Sedang (Medium) | 10: Sangat Keras (Firm)</small>
+              <small class="form-help">1: Sangat Sederhana | 5: Baik | 10: Sempurna</small>
             </div>
           </div>
 
           <!-- Media & Specifications (Sizes & Features) -->
           <div class="form-col">
             <div class="form-group">
-              <label>Foto Produk*</label>
+              <label>Foto Kamar*</label>
               <div class="image-upload-area">
                 <div class="file-input-wrapper">
                   <button type="button" class="btn btn-outline btn-file">Pilih Berkas Foto</button>
@@ -384,17 +381,17 @@
             </div>
 
             <div class="form-group">
-              <label>Fitur Unggulan (Satu per baris)*</label>
-              <textarea id="form-features" rows="3" placeholder="Chiropractic Support System&#10;Natural Latex Layer&#10;Anti-Dust Mite"></textarea>
+              <label>Fasilitas Utama (Satu per baris)*</label>
+              <textarea id="form-features" rows="3" placeholder="Kolam Renang Pribadi (Private Pool)&#10;Balkon Pribadi&#10;King-Size Bed Premium"></textarea>
             </div>
 
             <div class="form-group">
-              <label>Ukuran & Harga (Rupiah)*</label>
+              <label>Paket & Harga (Rupiah)*</label>
               <div id="form-sizes-container" class="form-sizes-list">
                 <!-- Size & Price rows will be added here dynamically -->
               </div>
               <button type="button" class="btn btn-outline-info btn-small" onclick="addSizeRow('', '')">
-                + Tambah Pilihan Ukuran
+                + Tambah Paket Booking
               </button>
             </div>
           </div>
@@ -402,7 +399,7 @@
 
         <div class="form-actions-footer">
           <button type="button" class="btn btn-outline" onclick="closeProductFormModal()">Batal</button>
-          <button type="submit" class="btn btn-primary">Simpan Produk</button>
+          <button type="submit" class="btn btn-primary">Simpan Kamar</button>
         </div>
       </form>
     </div>
@@ -412,18 +409,18 @@
   <footer class="footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <h3>SUPERIOR SLEEP GALLERY</h3>
-        <p>Menghadirkan kasur kualitas premium untuk kenyamanan tidur terbaik keluarga Anda sejak 2018.</p>
+        <h3>VILLA AB COZY RESORT</h3>
+        <p>Menghadirkan penginapan villa kualitas premium untuk kenyamanan berlibur terbaik keluarga Anda.</p>
       </div>
       <div class="footer-links">
         <h4>Hubungi Kami</h4>
         <p>WhatsApp: <strong>0855-3658-1733</strong></p>
-        <p>Alamat Galeri: Jl. Raya Kasur Indah No. 88, Jakarta</p>
-        <p>Jam Buka: Setiap Hari (09.00 - 20.00 WIB)</p>
+        <p>Alamat Resort: Jl. Raya Puncak Indah No. 88, Bogor</p>
+        <p>Waktu Check-In: Mulai 14.00 WIB | Check-Out: s/d 12.00 WIB</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 Superior Sleep Gallery. Semua Hak Dilindungi. Dibuat dengan 💖 untuk Tidur Berkualitas.</p>
+      <p>&copy; 2026 Villa AB Cozy Resort. Semua Hak Dilindungi. Dibuat dengan 💖 untuk Kenyamanan Liburan Anda.</p>
     </div>
   </footer>
 
