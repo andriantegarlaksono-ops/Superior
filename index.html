@@ -132,8 +132,24 @@
 
       <div class="modal-grid">
         <!-- Left Side: Image Gallery -->
-        <div class="modal-gallery">
+        <div class="modal-gallery" id="modal-gallery-container">
           <img id="detail-image" src="" alt="Gambar Produk">
+
+          <!-- Prev / Next arrows -->
+          <button class="gallery-nav-btn gallery-prev" id="gallery-prev-btn" onclick="prevGalleryImage()"
+            aria-label="Foto sebelumnya" style="display:none">
+            &#8249;
+          </button>
+          <button class="gallery-nav-btn gallery-next" id="gallery-next-btn" onclick="nextGalleryImage()"
+            aria-label="Foto berikutnya" style="display:none">
+            &#8250;
+          </button>
+
+          <!-- Photo counter -->
+          <span class="gallery-counter" id="gallery-counter" style="display:none">1 / 1</span>
+
+          <!-- Thumbnail strip -->
+          <div class="gallery-thumb-strip" id="gallery-thumb-strip"></div>
         </div>
 
         <!-- Right Side: Details -->
@@ -259,7 +275,8 @@
       <div class="admin-notice">
         <p><strong>💡 Panduan Deploy:</strong> Perubahan tersimpan secara lokal di browser Anda. Klik tombol
           <strong>"Ekspor data.json"</strong> setelah mengedit, lalu timpa berkas `data.json` di repositori GitHub Anda.
-          Vercel akan otomatis melakukan build ulang agar perubahan Anda dapat dilihat oleh semua orang.</p>
+          Vercel akan otomatis melakukan build ulang agar perubahan Anda dapat dilihat oleh semua orang.
+        </p>
       </div>
 
       <!-- Tab Kelola Produk -->
@@ -411,19 +428,28 @@
           <!-- Media & Specifications (Sizes & Features) -->
           <div class="form-col">
             <div class="form-group">
-              <label>Foto Kamar*</label>
+              <label>Foto Kamar* <span style="color:var(--color-text-secondary);font-weight:400;">(bisa lebih dari
+                  1)</span></label>
+              <!-- Gallery preview -->
+              <div class="form-gallery-wrap">
+                <div id="form-gallery-list" class="form-gallery-grid">
+                  <p class="gallery-empty-hint">Belum ada foto. Tambahkan foto di bawah.</p>
+                </div>
+              </div>
+              <!-- Upload area -->
               <div class="image-upload-area">
                 <div class="file-input-wrapper">
-                  <button type="button" class="btn btn-outline btn-file">Pilih Berkas Foto</button>
-                  <input type="file" id="form-image-file" accept="image/*" onchange="previewAndConvertImage(this)">
+                  <button type="button" class="btn btn-outline btn-file">+ Pilih Berkas Foto</button>
+                  <input type="file" id="form-image-file" accept="image/*" multiple
+                    onchange="previewAndConvertImage(this)">
                 </div>
                 <div class="url-input-or">atau masukkan URL foto:</div>
-                <input type="text" id="form-image-url" placeholder="https://example.com/photo.jpg"
-                  oninput="updateImagePreviewFromUrl(this.value)">
-              </div>
-              <div class="image-preview-container">
-                <img id="form-image-preview" src="" alt="Pratinjau Foto" style="display: none;">
-                <input type="hidden" id="form-image-base64">
+                <div style="display:flex;gap:8px;align-items:center;">
+                  <input type="text" id="form-image-url" placeholder="https://example.com/photo.jpg"
+                    style="flex-grow:1;padding:10px 14px;background:var(--bg-primary);border:1px solid var(--color-border);border-radius:var(--radius-md);color:var(--color-text-primary);">
+                  <button type="button" class="btn btn-outline-info" onclick="addImageUrlToGallery()"
+                    style="white-space:nowrap;padding:10px 16px;font-size:13px;">+ Tambah URL</button>
+                </div>
               </div>
             </div>
 

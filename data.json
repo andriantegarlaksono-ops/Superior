@@ -137,31 +137,28 @@
     },
     {
       "id": "5",
-      "name": "Luxury Andrian room",
+      "name": "Luxury Glamping Tent",
       "category": "Glamping",
       "description": "Rasakan sensasi berkemah mewah dengan fasilitas bintang lima di tengah alam terbuka. Tenda glamping premium dengan tempat tidur empuk, area api unggun pribadi, dan pemandangan pegunungan yang menakjubkan.",
-      "thickness": 2,
+      "thickness": 4,
       "firmness": 9,
-      "warranty": 1,
-      "image": "https://images.pexels.com/photos/35203561/pexels-photo-35203561.jpeg",
+      "warranty": 2,
+      "image": "https://images.unsplash.com/photo-1533587851351-e374ee74a6c4?auto=format&fit=crop&w=800&q=80",
       "features": [
         "Pemandangan Gunung Menakjubkan",
-        "Kasur Yang Empuk Dan Nyaman",
+        "Area Api Unggun & Outdoor Deck",
         "Kamar Mandi Privat dengan Air Panas",
-        "Balkon yang enak dan nyaman"
+        "Suasana Hutan Alami & Tenang",
+        "Termasuk Paket Sarapan"
       ],
       "sizes": [
         {
           "name": "Menginap 1 Hari (Weekday)",
-          "price": 125000
+          "price": 500000
         },
         {
           "name": "Menginap 1 Hari (Weekend)",
-          "price": 150000
-        },
-        {
-          "name": "Short time",
-          "price": 70000
+          "price": 650000
         }
       ]
     }

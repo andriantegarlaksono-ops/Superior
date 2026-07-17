@@ -138,11 +138,16 @@ function renderCatalog(filteredProducts = products) {
     else if (product.firmness === 8) ratingText = "Baik";
     else ratingText = "Standar";
 
+    // Support both images[] array and legacy image string
+    const firstImage = getFirstImage(product);
+    const imageCount = getImages(product).length;
+
     return `
       <div class="product-card" id="prod-${product.id}">
         <span class="product-cat-tag">${product.category}</span>
         <div class="product-img-wrapper">
-          <img class="product-img" src="${product.image || 'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80'}" alt="${product.name}" loading="lazy">
+          <img class="product-img" src="${firstImage}" alt="${product.name}" loading="lazy">
+          ${imageCount > 1 ? `<span class="photo-count-badge">📷 ${imageCount} Foto</span>` : ''}
         </div>
         <div class="product-body">
           <h3 class="product-title">${product.name}</h3>
@@ -431,16 +436,92 @@ function deleteCategory(catName) {
   }
 }
 
+// Helper: get images array from product (supports both old image string and new images[])
+function getImages(product) {
+  if (product.images && product.images.length > 0) return product.images;
+  if (product.image) return [product.image];
+  return ['https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80'];
+}
+
+function getFirstImage(product) {
+  return getImages(product)[0];
+}
+
+// Gallery state
+let currentGalleryIndex = 0;
+let currentGalleryImages = [];
+
+function showGalleryImage(index) {
+  if (currentGalleryImages.length === 0) return;
+  // Wrap around
+  if (index < 0) index = currentGalleryImages.length - 1;
+  if (index >= currentGalleryImages.length) index = 0;
+  currentGalleryIndex = index;
+
+  const mainImg = document.getElementById("detail-image");
+  mainImg.style.opacity = '0';
+  setTimeout(() => {
+    mainImg.src = currentGalleryImages[currentGalleryIndex];
+    mainImg.style.opacity = '1';
+  }, 150);
+
+  // Update thumbnails
+  const thumbs = document.querySelectorAll('.gallery-thumb');
+  thumbs.forEach((t, i) => {
+    t.classList.toggle('active', i === currentGalleryIndex);
+  });
+
+  // Update counter
+  const counter = document.getElementById('gallery-counter');
+  if (counter) counter.innerText = `${currentGalleryIndex + 1} / ${currentGalleryImages.length}`;
+}
+
+function prevGalleryImage() { showGalleryImage(currentGalleryIndex - 1); }
+function nextGalleryImage() { showGalleryImage(currentGalleryIndex + 1); }
+
 // 4. CUSTOMER VIEW: PRODUCT DETAILS MODAL
 function openDetailModal(id) {
   const product = products.find(p => p.id === id);
   if (!product) return;
 
   selectedProduct = product;
+  currentGalleryImages = getImages(product);
+  currentGalleryIndex = 0;
 
-  // Set Images & Text
-  document.getElementById("detail-image").src = product.image || 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80';
-  document.getElementById("detail-image").alt = product.name;
+  // Set Main Image
+  const mainImg = document.getElementById("detail-image");
+  mainImg.src = currentGalleryImages[0];
+  mainImg.alt = product.name;
+  mainImg.style.opacity = '1';
+
+  // Build gallery controls
+  const galleryEl = document.getElementById('modal-gallery-container');
+  const hasMultiple = currentGalleryImages.length > 1;
+
+  // Thumbnail strip
+  const thumbStrip = document.getElementById('gallery-thumb-strip');
+  if (thumbStrip) {
+    if (hasMultiple) {
+      thumbStrip.innerHTML = currentGalleryImages.map((src, i) =>
+        `<img class="gallery-thumb ${i === 0 ? 'active' : ''}" src="${src}" onclick="showGalleryImage(${i})" alt="Foto ${i+1}">`
+      ).join('');
+      thumbStrip.style.display = 'flex';
+    } else {
+      thumbStrip.innerHTML = '';
+      thumbStrip.style.display = 'none';
+    }
+  }
+
+  // Show/hide navigation arrows
+  const prevBtn = document.getElementById('gallery-prev-btn');
+  const nextBtn = document.getElementById('gallery-next-btn');
+  const counter = document.getElementById('gallery-counter');
+  if (prevBtn) prevBtn.style.display = hasMultiple ? 'flex' : 'none';
+  if (nextBtn) nextBtn.style.display = hasMultiple ? 'flex' : 'none';
+  if (counter) {
+    counter.style.display = hasMultiple ? 'block' : 'none';
+    counter.innerText = `1 / ${currentGalleryImages.length}`;
+  }
   document.getElementById("detail-category").innerText = product.category;
   document.getElementById("detail-name").innerText = product.name;
   document.getElementById("detail-thickness").innerText = `${product.thickness} Orang`;
@@ -605,7 +686,7 @@ function renderAdminTable() {
     return `
       <tr>
         <td>
-          <img class="admin-thumbnail" src="${product.image || 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80'}" alt="">
+          <img class="admin-thumbnail" src="${getFirstImage(product)}" alt="">
         </td>
         <td><strong>${product.name}</strong></td>
         <td><span class="detail-category-badge">${product.category}</span></td>
@@ -629,10 +710,8 @@ function openAddProductForm() {
 
   // Clear file uploads and previews
   document.getElementById("form-product-id").value = "";
-  document.getElementById("form-image-preview").src = "";
-  document.getElementById("form-image-preview").style.display = "none";
-  document.getElementById("form-image-base64").value = "";
   document.getElementById("form-firmness-val").innerText = "5";
+  clearAllFormImages();
 
   // Populate form categories dropdown
   populateFormCategories();
@@ -666,25 +745,15 @@ function openEditProductForm(id) {
   document.getElementById("form-firmness").value = product.firmness;
   document.getElementById("form-firmness-val").innerText = product.firmness;
 
-  // Image handling
-  const preview = document.getElementById("form-image-preview");
-  const base64Input = document.getElementById("form-image-base64");
-  const urlInput = document.getElementById("form-image-url");
-
-  base64Input.value = ""; // Clear temporary file
-  urlInput.value = "";
-
-  if (product.image) {
-    if (product.image.startsWith("data:image")) {
-      base64Input.value = product.image;
-      preview.src = product.image;
-    } else {
-      urlInput.value = product.image;
-      preview.src = product.image;
-    }
-    preview.style.display = "block";
-  } else {
-    preview.style.display = "none";
+  // Image handling - multi-image
+  clearAllFormImages();
+  const imagesToLoad = getImages(product);
+  // Load first image into main slot, rest as extra
+  if (imagesToLoad.length > 0) {
+    // Load all images into gallery slots
+    imagesToLoad.forEach((imgSrc, idx) => {
+      addImageToFormGallery(imgSrc);
+    });
   }
 
   // Features List (newline-separated)
@@ -730,37 +799,86 @@ function removeSizeRow(rowId) {
   }
 }
 
-// Image encoder (Base64)
-function previewAndConvertImage(fileInput) {
-  const file = fileInput.files[0];
-  const preview = document.getElementById("form-image-preview");
-  const base64Input = document.getElementById("form-image-base64");
-  const urlInput = document.getElementById("form-image-url");
+// ============================================================
+// MULTI-IMAGE GALLERY MANAGEMENT (ADMIN FORM)
+// ============================================================
 
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      preview.src = e.target.result;
-      preview.style.display = "block";
-      base64Input.value = e.target.result; // Save Base64 code
-      urlInput.value = ""; // Clear text URL to avoid conflict
-    };
-    reader.readAsDataURL(file);
-  }
+// formImageList: array of image src strings currently in the form
+let formImageList = [];
+
+function clearAllFormImages() {
+  formImageList = [];
+  renderFormGallery();
+  // Clear file input
+  const fi = document.getElementById("form-image-file");
+  if (fi) fi.value = "";
+  document.getElementById("form-image-url").value = "";
 }
 
-// Handle URL Input directly
-function updateImagePreviewFromUrl(url) {
-  const preview = document.getElementById("form-image-preview");
-  const base64Input = document.getElementById("form-image-base64");
+function addImageToFormGallery(src) {
+  if (!src || !src.trim()) return;
+  formImageList.push(src.trim());
+  renderFormGallery();
+}
 
-  if (url.trim()) {
-    preview.src = url.trim();
-    preview.style.display = "block";
-    base64Input.value = ""; // Clear file uploaded to avoid conflict
-  } else {
-    preview.style.display = "none";
+function removeFormImage(index) {
+  formImageList.splice(index, 1);
+  renderFormGallery();
+}
+
+function renderFormGallery() {
+  const container = document.getElementById("form-gallery-list");
+  if (!container) return;
+
+  if (formImageList.length === 0) {
+    container.innerHTML = `<p class="gallery-empty-hint">Belum ada foto. Tambahkan foto di bawah.</p>`;
+    return;
   }
+
+  container.innerHTML = formImageList.map((src, i) => `
+    <div class="form-gallery-item">
+      <img src="${src}" alt="Foto ${i+1}" onerror="this.src='https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=200&q=60'">
+      <div class="form-gallery-overlay">
+        <span class="form-gallery-num">${i+1}</span>
+        <button type="button" class="btn-remove-gallery-img" onclick="removeFormImage(${i})" title="Hapus foto">&times;</button>
+      </div>
+      ${i === 0 ? '<span class="form-gallery-main-badge">Utama</span>' : ''}
+    </div>
+  `).join('');
+}
+
+// File upload handler - adds to gallery
+function previewAndConvertImage(fileInput) {
+  const files = fileInput.files;
+  if (!files || files.length === 0) return;
+
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      addImageToFormGallery(e.target.result);
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Reset file input so same file can be re-added if needed
+  fileInput.value = "";
+}
+
+// Handle URL Input - add URL to gallery
+function addImageUrlToGallery() {
+  const urlInput = document.getElementById("form-image-url");
+  const url = urlInput.value.trim();
+  if (!url) {
+    alert("Masukkan URL foto terlebih dahulu!");
+    return;
+  }
+  addImageToFormGallery(url);
+  urlInput.value = "";
+}
+
+// Legacy stub - not used but kept for safety
+function updateImagePreviewFromUrl(url) {
+  // No-op, replaced by addImageUrlToGallery
 }
 
 // Submit Product (Add/Edit)
@@ -782,13 +900,11 @@ function handleProductFormSubmit(event) {
   const warranty = parseInt(document.getElementById("form-warranty").value);
   const firmness = parseInt(document.getElementById("form-firmness").value);
 
-  // Image priority: Base64 Upload > Text URL
-  const base64Img = document.getElementById("form-image-base64").value;
-  const urlImg = document.getElementById("form-image-url").value.trim();
-  const image = base64Img || urlImg;
+  // Images: collect from formImageList
+  const images = [...formImageList];
 
-  if (!image) {
-    alert("Harap pilih berkas foto atau masukkan URL gambar kamar!");
+  if (images.length === 0) {
+    alert("Harap tambahkan setidaknya satu foto kamar!");
     return;
   }
 
@@ -834,7 +950,8 @@ function handleProductFormSubmit(event) {
         thickness,
         firmness,
         warranty,
-        image,
+        images,
+        image: images[0], // backward compat
         features,
         sizes
       };
@@ -851,7 +968,8 @@ function handleProductFormSubmit(event) {
       thickness,
       firmness,
       warranty,
-      image,
+      images,
+      image: images[0], // backward compat
       features,
       sizes
     };

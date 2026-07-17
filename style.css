@@ -1286,3 +1286,240 @@ button, input, select, textarea {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ============================================================
+   16. MULTI-IMAGE GALLERY STYLES
+   ============================================================ */
+
+/* Badge jumlah foto di kartu produk */
+.photo-count-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(10, 7, 12, 0.8);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  z-index: 3;
+  letter-spacing: 0.5px;
+}
+
+/* ---- DETAIL MODAL GALLERY ---- */
+.modal-gallery {
+  position: relative;
+}
+
+#detail-image {
+  transition: opacity 0.15s ease;
+}
+
+/* Navigasi Panah */
+.gallery-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(10, 7, 12, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+  z-index: 10;
+  padding: 0;
+}
+
+.gallery-nav-btn:hover {
+  background: rgba(226, 117, 147, 0.7);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.gallery-prev { left: 10px; }
+.gallery-next { right: 10px; }
+
+/* Counter foto */
+.gallery-counter {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 7, 12, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  z-index: 10;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Strip thumbnail */
+.gallery-thumb-strip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(0deg, rgba(10,7,12,0.9) 0%, transparent 100%);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-gold) transparent;
+  z-index: 10;
+}
+
+.gallery-thumb-strip::-webkit-scrollbar {
+  height: 3px;
+}
+
+.gallery-thumb-strip::-webkit-scrollbar-thumb {
+  background: var(--accent-gold);
+  border-radius: 10px;
+}
+
+.gallery-thumb {
+  width: 52px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.6;
+  transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.gallery-thumb:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.gallery-thumb.active {
+  border-color: var(--accent-gold);
+  opacity: 1;
+}
+
+/* ---- ADMIN FORM GALLERY ---- */
+.form-gallery-wrap {
+  margin-bottom: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(0,0,0,0.2);
+  padding: 10px;
+  min-height: 80px;
+}
+
+.form-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.form-gallery-item {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.form-gallery-item:first-child {
+  border-color: var(--accent-gold);
+}
+
+.form-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.form-gallery-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 4px;
+  transition: background 0.2s;
+}
+
+.form-gallery-item:hover .form-gallery-overlay {
+  background: rgba(0,0,0,0.45);
+}
+
+.form-gallery-num {
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0,0,0,0.6);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.btn-remove-gallery-img {
+  background: rgba(239,68,68,0.85);
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.form-gallery-item:hover .btn-remove-gallery-img {
+  opacity: 1;
+}
+
+.form-gallery-main-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gallery-empty-hint {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: 16px 8px;
+  grid-column: 1 / -1;
+  font-style: italic;
+}
+
