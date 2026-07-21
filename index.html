@@ -133,24 +133,27 @@
       <div class="modal-grid">
         <!-- Left Side: Image Gallery -->
         <div class="modal-gallery" id="modal-gallery-container">
-          <img id="detail-image" src="" alt="Gambar Produk">
 
-          <!-- Prev / Next arrows -->
-          <button class="gallery-nav-btn gallery-prev" id="gallery-prev-btn" onclick="prevGalleryImage()"
-            aria-label="Foto sebelumnya" style="display:none">
-            &#8249;
-          </button>
-          <button class="gallery-nav-btn gallery-next" id="gallery-next-btn" onclick="nextGalleryImage()"
-            aria-label="Foto berikutnya" style="display:none">
-            &#8250;
-          </button>
+          <!-- Main Image Slot -->
+          <div class="gallery-main-slide">
+            <img id="detail-image" src="" alt="Gambar Produk">
+          </div>
 
-          <!-- Photo counter -->
-          <span class="gallery-counter" id="gallery-counter" style="display:none">1 / 1</span>
+          <!-- Arrow Row + Counter (muncul hanya jika > 1 foto) -->
+          <div class="gallery-controls-row" id="gallery-controls-row" style="display:none">
+            <button class="gallery-arrow-btn" id="gallery-prev-btn" onclick="prevGalleryImage()" aria-label="Foto sebelumnya">
+              &#8249;
+            </button>
+            <span class="gallery-counter" id="gallery-counter">1 / 1</span>
+            <button class="gallery-arrow-btn" id="gallery-next-btn" onclick="nextGalleryImage()" aria-label="Foto berikutnya">
+              &#8250;
+            </button>
+          </div>
 
-          <!-- Thumbnail strip -->
-          <div class="gallery-thumb-strip" id="gallery-thumb-strip"></div>
+          <!-- Thumbnail Strip (muncul hanya jika > 1 foto) -->
+          <div class="gallery-thumb-strip" id="gallery-thumb-strip" style="display:none"></div>
         </div>
+
 
         <!-- Right Side: Details -->
         <div class="modal-info">

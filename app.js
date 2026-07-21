@@ -512,16 +512,11 @@ function openDetailModal(id) {
     }
   }
 
-  // Show/hide navigation arrows
-  const prevBtn = document.getElementById('gallery-prev-btn');
-  const nextBtn = document.getElementById('gallery-next-btn');
+  // Show/hide navigation controls row (panah + counter) sebagai satu unit
+  const controlsRow = document.getElementById('gallery-controls-row');
   const counter = document.getElementById('gallery-counter');
-  if (prevBtn) prevBtn.style.display = hasMultiple ? 'flex' : 'none';
-  if (nextBtn) nextBtn.style.display = hasMultiple ? 'flex' : 'none';
-  if (counter) {
-    counter.style.display = hasMultiple ? 'block' : 'none';
-    counter.innerText = `1 / ${currentGalleryImages.length}`;
-  }
+  if (controlsRow) controlsRow.style.display = hasMultiple ? 'flex' : 'none';
+  if (counter) counter.innerText = `1 / ${currentGalleryImages.length}`;
   document.getElementById("detail-category").innerText = product.category;
   document.getElementById("detail-name").innerText = product.name;
   document.getElementById("detail-thickness").innerText = `${product.thickness} Orang`;
