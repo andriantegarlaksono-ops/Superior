@@ -1146,49 +1146,154 @@ button, input, select, textarea {
 .footer {
   background-color: var(--bg-secondary);
   border-top: 1px solid var(--color-border);
-  padding: 60px 0 20px;
 }
 
-.footer-grid {
+.footer-map-section {
+  padding: 60px 0 40px;
+}
+
+.footer-map-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 40px;
-  margin-bottom: 40px;
+  grid-template-columns: 1.6fr 1fr 1.4fr;
+  gap: 48px;
+  align-items: start;
 }
 
-.footer-brand h3 {
-  font-family: var(--font-serif);
-  font-size: 20px;
-  color: var(--accent-gold);
-  letter-spacing: 2px;
-  margin-bottom: 16px;
+/* Kolom 1: Brand */
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
 }
 
 .footer-brand p {
   color: var(--color-text-secondary);
-  max-width: 450px;
   font-size: 14px;
+  line-height: 1.7;
 }
 
-.footer-links h4 {
-  font-size: 16px;
-  color: var(--color-white);
-  margin-bottom: 16px;
+.footer-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-whatsapp);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s;
+  align-self: flex-start;
 }
 
-.footer-links p {
+.footer-wa-btn:hover {
+  background-color: var(--color-whatsapp-hover);
+  transform: translateY(-2px);
+}
+
+/* Kolom 2: Info Kontak */
+.footer-contact h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.footer-contact-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-contact-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   font-size: 14px;
   color: var(--color-text-secondary);
-  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.footer-contact-list li svg {
+  flex-shrink: 0;
+  color: var(--accent-gold);
+  margin-top: 2px;
+}
+
+.footer-contact-list li strong {
+  color: var(--color-text-primary);
+}
+
+/* Kolom 3: Maps */
+.footer-map-embed-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-map-embed-wrap h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.footer-map-frame {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-premium);
+}
+
+.footer-map-frame iframe {
+  display: block;
+  filter: grayscale(30%) contrast(1.05);
+  transition: filter 0.3s;
+}
+
+.footer-map-frame:hover iframe {
+  filter: grayscale(0%) contrast(1);
+}
+
+.footer-open-maps-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-gold);
+  text-decoration: none;
+  padding: 8px 14px;
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-sm);
+  transition: background 0.2s, transform 0.2s;
+  align-self: flex-start;
+}
+
+.footer-open-maps-btn:hover {
+  background-color: var(--accent-gold-light);
+  transform: translateY(-1px);
 }
 
 .footer-bottom {
   border-top: 1px solid var(--color-border);
-  padding-top: 20px;
+  padding: 20px 24px;
   text-align: center;
   font-size: 12px;
   color: var(--color-text-secondary);
 }
+
 
 /* ==========================================================================
    15. RESPONSIVE MEDIA QUERIES
@@ -1219,8 +1324,9 @@ button, input, select, textarea {
     font-size: 36px;
   }
   
-  .footer-grid {
+  .footer-map-grid {
     grid-template-columns: 1fr;
+    gap: 32px;
   }
 }
 
