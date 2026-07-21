@@ -16,14 +16,68 @@ let currentEditingId = null;
 
 const CATEGORIES_KEY = "villa_ab_categories";
 
+// ==========================================================================
+// TOAST NOTIFICATION SYSTEM
+// ==========================================================================
+function showToast(message, type = 'success', duration = 3000) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+
+  const icons = { success: '✓', error: '✕', warning: '⚠', info: 'ℹ' };
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<span class="toast-icon">${icons[type] || '✓'}</span><span>${message}</span>`;
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => toast.classList.add('show'));
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 350);
+  }, duration);
+}
+
+// ==========================================================================
+// LOCALSTORAGE FIELD MIGRATION (thickness→capacity, warranty→beds, firmness→rating)
+// ==========================================================================
+function migrateLocalStorage() {
+  const localData = localStorage.getItem(STORAGE_KEY);
+  if (!localData) return;
+  try {
+    const stored = JSON.parse(localData);
+    let changed = false;
+    const migrated = stored.map(p => {
+      const n = { ...p };
+      if ('thickness' in p && !('capacity' in p)) { n.capacity = p.thickness; delete n.thickness; changed = true; }
+      if ('warranty'  in p && !('beds'     in p)) { n.beds     = p.warranty;  delete n.warranty;  changed = true; }
+      if ('firmness'  in p && !('rating'   in p)) { n.rating   = p.firmness;  delete n.firmness;  changed = true; }
+      return n;
+    });
+    if (changed) localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+  } catch (e) { console.warn('Migration error:', e); }
+}
+
 // Initialize App
 window.addEventListener("DOMContentLoaded", () => {
+  // Escape key closes any open modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('detail-modal').style.display === 'block')        closeDetailModal();
+    else if (document.getElementById('login-modal').style.display === 'block')   closeLoginModal();
+    else if (document.getElementById('admin-modal').style.display === 'block')   closeAdminModal();
+    else if (document.getElementById('product-form-modal').style.display === 'block') closeProductFormModal();
+  });
+
+  migrateLocalStorage();
   initData();
   checkLoginStatus();
 });
 
 // 1. DATA INITIALIZATION
 async function initData() {
+  // Show skeleton loading
+  renderSkeletons();
+
   const localData = localStorage.getItem(STORAGE_KEY);
   if (localData) {
     try {
@@ -105,7 +159,24 @@ function formatIDR(number) {
   }).format(number);
 }
 
-// 2. CLIENT-SIDE RENDERING
+// 2. SKELETON LOADING
+function renderSkeletons(count = 3) {
+  const grid = document.getElementById('product-grid');
+  if (!grid) return;
+  grid.innerHTML = Array.from({ length: count }).map(() => `
+    <div class="skeleton-card">
+      <div class="skeleton-img"></div>
+      <div class="skeleton-body">
+        <div class="skeleton-line short"></div>
+        <div class="skeleton-line tall"></div>
+        <div class="skeleton-line medium"></div>
+        <div class="skeleton-line short"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 3. CLIENT-SIDE RENDERING
 function renderCatalog(filteredProducts = products) {
   const productGrid = document.getElementById("product-grid");
   const countSpan = document.getElementById("product-count");
@@ -133,18 +204,24 @@ function renderCatalog(filteredProducts = products) {
 
     // Determine rating label
     let ratingText = "Baik";
-    if (product.firmness === 10) ratingText = "Sempurna";
-    else if (product.firmness === 9) ratingText = "Sangat Baik";
-    else if (product.firmness === 8) ratingText = "Baik";
+    if (product.rating === 10) ratingText = "Sempurna";
+    else if (product.rating >= 9) ratingText = "Sangat Baik";
+    else if (product.rating >= 8) ratingText = "Baik";
     else ratingText = "Standar";
 
     // Support both images[] array and legacy image string
     const firstImage = getFirstImage(product);
     const imageCount = getImages(product).length;
 
+    // Badge ribbon
+    const badgeHtml = product.badge
+      ? `<span class="product-badge-ribbon">${product.badge}</span>`
+      : '';
+
     return `
       <div class="product-card" id="prod-${product.id}">
         <span class="product-cat-tag">${product.category}</span>
+        ${badgeHtml}
         <div class="product-img-wrapper">
           <img class="product-img" src="${firstImage}" alt="${product.name}" loading="lazy">
           ${imageCount > 1 ? `<span class="photo-count-badge">📷 ${imageCount} Foto</span>` : ''}
@@ -155,15 +232,15 @@ function renderCatalog(filteredProducts = products) {
           <div class="product-quick-specs">
             <div class="spec-badge">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-              <span>${product.thickness} Orang</span>
+              <span>${product.capacity} Orang</span>
             </div>
             <div class="spec-badge">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16M2 8h20M2 12h20M2 16h20M22 4v16M18 8H6v4h12V8z"/></svg>
-              <span>${product.warranty} Ranjang</span>
+              <span>${product.beds} Ranjang</span>
             </div>
             <div class="spec-badge">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span>${ratingText} (${product.firmness}/10)</span>
+              <span>${ratingText} (${product.rating}/10)</span>
             </div>
           </div>
           
@@ -186,8 +263,9 @@ function renderCatalog(filteredProducts = products) {
 function applyFilters() {
   const searchVal = document.getElementById("search-input").value.toLowerCase();
   const categoryVal = document.getElementById("category-filter").value;
-  const firmnessVal = document.getElementById("firmness-filter").value;
+  const ratingVal = document.getElementById("firmness-filter").value;
   const sizeVal = document.getElementById("size-filter").value;
+  const priceVal = document.getElementById("price-filter")?.value || 'all';
 
   const filtered = products.filter(product => {
     // Search keyword
@@ -200,27 +278,32 @@ function applyFilters() {
     // Category filter
     const matchesCategory = categoryVal === "all" || product.category === categoryVal;
 
-    // Firmness filter
-    let matchesFirmness = true;
-    if (firmnessVal === "soft") matchesFirmness = product.firmness <= 4;
-    else if (firmnessVal === "medium") matchesFirmness = product.firmness >= 5 && product.firmness <= 7;
-    else if (firmnessVal === "firm") matchesFirmness = product.firmness >= 8;
+    // Rating filter
+    let matchesRating = true;
+    if (ratingVal === "soft") matchesRating = product.rating <= 4;
+    else if (ratingVal === "medium") matchesRating = product.rating >= 5 && product.rating <= 7;
+    else if (ratingVal === "firm") matchesRating = product.rating >= 8;
 
     // Size filter (mapped to booking packages)
     let matchesSize = true;
     if (sizeVal !== "all") {
       matchesSize = product.sizes.some(sizeObj => {
         const sizeName = sizeObj.name.toLowerCase();
-        if (sizeVal === "transit") {
-          return sizeName.includes("transit");
-        } else if (sizeVal === "menginap") {
-          return sizeName.includes("menginap");
-        }
+        if (sizeVal === "transit") return sizeName.includes("transit");
+        else if (sizeVal === "menginap") return sizeName.includes("menginap");
         return true;
       });
     }
 
-    return matchesSearch && matchesCategory && matchesFirmness && matchesSize;
+    // Price filter
+    let matchesPrice = true;
+    if (priceVal !== 'all') {
+      const [minP, maxP] = priceVal.split('-').map(Number);
+      const lowestPrice = Math.min(...product.sizes.map(s => s.price));
+      matchesPrice = lowestPrice >= minP && lowestPrice <= maxP;
+    }
+
+    return matchesSearch && matchesCategory && matchesRating && matchesSize && matchesPrice;
   });
 
   renderCatalog(filtered);
@@ -231,6 +314,8 @@ function resetFilters() {
   document.getElementById("category-filter").value = "all";
   document.getElementById("firmness-filter").value = "all";
   document.getElementById("size-filter").value = "all";
+  const priceFilter = document.getElementById("price-filter");
+  if (priceFilter) priceFilter.value = "all";
   renderCatalog();
 }
 
@@ -276,14 +361,14 @@ function saveInlineCategory() {
   
   const newCat = input.value.trim();
   if (!newCat) {
-    alert("Harap masukkan nama kategori!");
+    showToast('Harap masukkan nama kategori!', 'warning');
     return;
   }
   
   // Cek duplikasi
   const existCat = categories.find(cat => cat.toLowerCase() === newCat.toLowerCase());
   if (existCat) {
-    alert(`Kategori "${existCat}" sudah ada! Otomatis terpilih.`);
+    showToast(`Kategori "${existCat}" sudah ada! Otomatis terpilih.`, 'warning');
     document.getElementById("form-category").value = existCat;
     toggleInlineCategoryInput(false);
     return;
@@ -297,7 +382,7 @@ function saveInlineCategory() {
   // Refresh select dropdown dan langsung set terpilih
   populateFormCategories(newCat);
   toggleInlineCategoryInput(false);
-  alert(`Kategori "${newCat}" berhasil ditambahkan!`);
+  showToast(`Kategori "${newCat}" berhasil ditambahkan!`, 'success');
 }
 
 function populateFormCategories(selectedVal = "") {
@@ -382,7 +467,7 @@ function handleAddCategorySubmit(event) {
 
   // Cek duplikasi
   if (categories.some(cat => cat.toLowerCase() === newCatName.toLowerCase())) {
-    alert("Kategori dengan nama ini sudah ada!");
+    showToast('Kategori dengan nama ini sudah ada!', 'warning');
     return;
   }
 
@@ -392,7 +477,7 @@ function handleAddCategorySubmit(event) {
   renderAdminCategories();
 
   input.value = "";
-  alert(`Kategori "${newCatName}" berhasil ditambahkan!`);
+  showToast(`Kategori "${newCatName}" berhasil ditambahkan!`, 'success');
 }
 
 function deleteCategory(catName) {
@@ -412,9 +497,7 @@ function deleteCategory(catName) {
     // Perbarui kategori produk yang terdampak
     if (usedCount > 0) {
       products = products.map(p => {
-        if (p.category === catName) {
-          return { ...p, category: "Lainnya" };
-        }
+        if (p.category === catName) return { ...p, category: "Lainnya" };
         return p;
       });
       saveToLocalStorage();
@@ -429,10 +512,8 @@ function deleteCategory(catName) {
     updateCategoryFilters();
     renderAdminCategories();
     renderCatalog();
-    if (sessionStorage.getItem("adminLoggedIn") === "true") {
-      renderAdminTable();
-    }
-    alert(`Kategori "${catName}" berhasil dihapus.`);
+    if (sessionStorage.getItem("adminLoggedIn") === "true") renderAdminTable();
+    showToast(`Kategori "${catName}" berhasil dihapus.`, 'success');
   }
 }
 
@@ -519,20 +600,20 @@ function openDetailModal(id) {
   if (counter) counter.innerText = `1 / ${currentGalleryImages.length}`;
   document.getElementById("detail-category").innerText = product.category;
   document.getElementById("detail-name").innerText = product.name;
-  document.getElementById("detail-thickness").innerText = `${product.thickness} Orang`;
-  document.getElementById("detail-warranty").innerText = `${product.warranty} Ranjang`;
+  document.getElementById("detail-thickness").innerText = `${product.capacity} Orang`;
+  document.getElementById("detail-warranty").innerText = `${product.beds} Ranjang`;
 
-  // Firmness Bar (Rating Bar)
-  const firmnessPercentage = product.firmness * 10;
-  document.getElementById("detail-firmness-fill").style.width = `${firmnessPercentage}%`;
+  // Rating Bar
+  const ratingPercentage = product.rating * 10;
+  document.getElementById("detail-firmness-fill").style.width = `${ratingPercentage}%`;
 
-  let firmnessLabel = "Sempurna";
-  if (product.firmness <= 4) firmnessLabel = "Standar (Standard)";
-  else if (product.firmness >= 5 && product.firmness <= 7) firmnessLabel = "Baik (Good)";
-  else if (product.firmness >= 8 && product.firmness <= 9) firmnessLabel = "Sangat Baik (Very Good)";
-  else if (product.firmness === 10) firmnessLabel = "Sempurna (Excellent)";
+  let ratingLabel = "Sempurna";
+  if (product.rating <= 4) ratingLabel = "Standar (Standard)";
+  else if (product.rating >= 5 && product.rating <= 7) ratingLabel = "Baik (Good)";
+  else if (product.rating >= 8 && product.rating <= 9) ratingLabel = "Sangat Baik (Very Good)";
+  else if (product.rating === 10) ratingLabel = "Sempurna (Excellent)";
 
-  document.getElementById("detail-firmness-text").innerText = `${firmnessLabel} (${product.firmness}/10)`;
+  document.getElementById("detail-firmness-text").innerText = `${ratingLabel} (${product.rating}/10)`;
   document.getElementById("detail-description").innerText = product.description;
 
   // Features List
@@ -580,9 +661,9 @@ function orderViaWhatsApp() {
     `*Kamar:* ${selectedProduct.name}\n` +
     `*Kategori:* ${selectedProduct.category}\n` +
     `*Paket:* ${sizeObj.name}\n` +
-    `*Kapasitas:* ${selectedProduct.thickness} Orang\n` +
-    `*Jumlah Ranjang:* ${selectedProduct.warranty} Ranjang\n` +
-    `*Rating Kamar:* ${selectedProduct.firmness}/10\n` +
+    `*Kapasitas:* ${selectedProduct.capacity} Orang\n` +
+    `*Jumlah Ranjang:* ${selectedProduct.beds} Ranjang\n` +
+    `*Rating Kamar:* ${selectedProduct.rating}/10\n` +
     `*Harga:* ${priceFormatted}\n\n` +
     `Apakah kamar tersebut tersedia untuk dipesan? Mohon info kelanjutannya. Terima kasih.`;
 
@@ -621,6 +702,7 @@ function handleLogin(event) {
     checkLoginStatus();
     closeLoginModal();
     openAdminModal();
+    showToast('Selamat datang, Admin!', 'success');
   } else {
     errorMsg.innerText = "Username atau password salah!";
     errorMsg.style.display = "block";
@@ -631,7 +713,7 @@ function handleLogout() {
   sessionStorage.removeItem("adminLoggedIn");
   checkLoginStatus();
   closeAdminModal();
-  alert("Anda telah keluar dari mode admin.");
+  showToast('Anda telah keluar dari mode admin.', 'info');
 }
 
 function checkLoginStatus() {
@@ -734,11 +816,14 @@ function openEditProductForm(id) {
   // Populate category select list
   populateFormCategories(product.category);
 
-  document.getElementById("form-description").value = product.description;
-  document.getElementById("form-thickness").value = product.thickness;
-  document.getElementById("form-warranty").value = product.warranty;
-  document.getElementById("form-firmness").value = product.firmness;
-  document.getElementById("form-firmness-val").innerText = product.firmness;
+  const capacityVal = product.capacity ?? product.thickness ?? 2;
+  const bedsVal = product.beds ?? product.warranty ?? 1;
+  const ratingVal = product.rating ?? product.firmness ?? 5;
+
+  document.getElementById("form-thickness").value = capacityVal;
+  document.getElementById("form-warranty").value = bedsVal;
+  document.getElementById("form-firmness").value = ratingVal;
+  document.getElementById("form-firmness-val").innerText = ratingVal;
 
   // Image handling - multi-image
   clearAllFormImages();
@@ -886,20 +971,20 @@ function handleProductFormSubmit(event) {
   const category = document.getElementById("form-category").value;
   
   if (!category) {
-    alert("Harap pilih kategori kamar!");
+    showToast('Harap pilih kategori kamar!', 'warning');
     return;
   }
 
   const description = document.getElementById("form-description").value.trim();
-  const thickness = parseInt(document.getElementById("form-thickness").value);
-  const warranty = parseInt(document.getElementById("form-warranty").value);
-  const firmness = parseInt(document.getElementById("form-firmness").value);
+  const capacity = parseInt(document.getElementById("form-thickness").value);
+  const beds     = parseInt(document.getElementById("form-warranty").value);
+  const rating   = parseInt(document.getElementById("form-firmness").value);
 
   // Images: collect from formImageList
   const images = [...formImageList];
 
   if (images.length === 0) {
-    alert("Harap tambahkan setidaknya satu foto kamar!");
+    showToast('Harap tambahkan setidaknya satu foto kamar!', 'warning');
     return;
   }
 
@@ -911,7 +996,7 @@ function handleProductFormSubmit(event) {
     .filter(f => f.length > 0);
 
   if (features.length === 0) {
-    alert("Harap masukkan setidaknya satu fitur/fasilitas utama kamar!");
+    showToast('Harap masukkan setidaknya satu fitur/fasilitas utama kamar!', 'warning');
     return;
   }
 
@@ -928,7 +1013,7 @@ function handleProductFormSubmit(event) {
   });
 
   if (sizes.length === 0) {
-    alert("Harap lengkapi setidaknya satu pilihan paket dan harga!");
+    showToast('Harap lengkapi setidaknya satu pilihan paket dan harga!', 'warning');
     return;
   }
 
@@ -942,15 +1027,15 @@ function handleProductFormSubmit(event) {
         name,
         category,
         description,
-        thickness,
-        firmness,
-        warranty,
+        capacity,
+        rating,
+        beds,
         images,
         image: images[0], // backward compat
         features,
         sizes
       };
-      alert("Detail kamar berhasil diperbarui!");
+      showToast('Detail kamar berhasil diperbarui!', 'success');
     }
   } else {
     // Add
@@ -960,16 +1045,16 @@ function handleProductFormSubmit(event) {
       name,
       category,
       description,
-      thickness,
-      firmness,
-      warranty,
+      capacity,
+      rating,
+      beds,
       images,
       image: images[0], // backward compat
       features,
       sizes
     };
     products.push(newProduct);
-    alert("Kamar baru berhasil ditambahkan!");
+    showToast('Kamar baru berhasil ditambahkan!', 'success');
   }
 
   // Save, render and close modals
@@ -992,7 +1077,7 @@ function deleteProduct(id) {
     updateCategoryFilters();
     renderCatalog();
     renderAdminTable();
-    alert("Kamar berhasil dihapus!");
+    showToast('Kamar berhasil dihapus!', 'success');
   }
 }
 
